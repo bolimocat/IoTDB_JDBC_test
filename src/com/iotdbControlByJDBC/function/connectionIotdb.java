@@ -85,12 +85,12 @@ public class connectionIotdb {
 	 * @param isCompress 是否压缩
 	 * @return
 	 */
-	public boolean createTS(String gpName,String devName,String tsName,String datatype,String ecoding,String isCompress){
+	public boolean createTS(String gpName,String devName,String tsName,String datatype,String ecoding,String isCompress,String ptNum){
 		boolean result = false;
 		try {
 			Class.forName(dbdriver);
 			ct = DriverManager.getConnection(dblink, user, password);
-			ps = ct.prepareStatement("create timeseries root."+gpName+"."+devName+"."+tsName+" with datatype="+datatype+",encoding="+ecoding+" , COMPRESSOR="+isCompress+"");
+			ps = ct.prepareStatement("create timeseries root."+gpName+"."+devName+"."+tsName+" with datatype="+datatype+",encoding="+ecoding+" , COMPRESSOR="+isCompress+", MAX_POINT_NUMBER="+ptNum+"");
 			if(ps.executeUpdate()==0){
 				result = true;
 				System.out.println("创建时序信息 root."+gpName+"."+devName+"."+tsName+"成功");

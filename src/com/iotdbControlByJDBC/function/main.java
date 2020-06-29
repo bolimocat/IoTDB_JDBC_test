@@ -11,7 +11,8 @@ public class main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		System.out.println("Control iotbd by JDBC .");
+		System.out.println("==============================================");
+		System.out.println("Test iotbd by JDBC .");
 		connectionIotdb cit = new connectionIotdb(args[0],"root","root");
 		String exeType = args[1];
 		dispatchCase dc = new dispatchCase();
@@ -22,7 +23,7 @@ public class main {
 		}
 		if(exeType.equals("CTS")){
 			System.out.println("进入 创建时序信息的 分支");
-			cit.createTS(args[2], args[3], args[4], args[5],args[6], args[7]);
+			cit.createTS(args[2], args[3], args[4], args[5],args[6], args[7],args[8]);
 		}
 		if(exeType.equals("IR1")){
 			System.out.println("进入 插入记录batch的 分支");
@@ -95,7 +96,8 @@ public class main {
 			cit.delTS(args[2]);
 			System.out.println("删除时序信息的 分支 结束");
 		}
-		
+		System.out.println("==============================================");
+		System.out.println("");
 	}
 
 }
