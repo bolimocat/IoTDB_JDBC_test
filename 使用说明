@@ -10,7 +10,7 @@ java -jar iotdbControlByJDBC.jar 参数1，参数2,参数3,... 参数n
 	1 创建存储组
 	java -jar iotdbControlByJDBC.jar "192.168.130.5" "CSG" "ln3"
 	2 创建时序信息
-	java -jar iotdbControlByJDBC.jar "192.168.130.5" "CTS" "ln3" "dev1" "status" "TEXT" "PLAIN" "SNAPPY"
+	java -jar iotdbControlByJDBC.jar "192.168.130.5" "CTS" "ln3" "dev1" "status" "TEXT" "PLAIN" "SNAPPY" "8"
 	3 batch方式插入记录
 	java -jar iotdbControlByJDBC.jar "192.168.130.5" "IR1" "ln3" "dev1" "status" "'123'"
 	4 普通方式插入记录
