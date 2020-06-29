@@ -1,0 +1,48 @@
+IoTDB JDBC 测试工具使用简单说明及问题
+
+1 当前工具使用方法：
+java -jar iotdbControlByJDBC.jar 参数1，参数2,参数3,... 参数n
+参数1:要连接的目标库的ipi地址
+参数2:本次测试要执行的测试类型
+目前本工具支持11个测试，根据测试类型的变化，后续参数3 到 n的数量和类型不同。
+
+2 本系统目前支持的测试
+	1 创建存储组
+	java -jar iotdbControlByJDBC.jar "192.168.130.5" "CSG" "ln3"
+	2 创建时序信息
+	java -jar iotdbControlByJDBC.jar "192.168.130.5" "CTS" "ln3" "dev1" "status" "TEXT" "PLAIN" "SNAPPY"
+	3 batch方式插入记录
+	java -jar iotdbControlByJDBC.jar "192.168.130.5" "IR1" "ln3" "dev1" "status" "'123'"
+	4 普通方式插入记录
+	java -jar iotdbControlByJDBC.jar "192.168.130.5" "IR2" "ln3" "dev1" "status" "'123'"
+	5 显示时序信息
+	java -jar iotdbControlByJDBC.jar "192.168.130.5" "STS" ""
+	或
+	java -jar iotdbControlByJDBC.jar "192.168.130.5" "STS" "ln3"
+	6 显示记录信息
+	java -jar iotdbControlByJDBC.jar "192.168.130.5" "ATS" ""
+	或
+	java -jar iotdbControlByJDBC.jar "192.168.130.5" "ATS" "ln3"
+	7 按等级统计节点数
+	java -jar iotdbControlByJDBC.jar "192.168.130.5" "NDL" "ln3" "3"
+	8 按等级统计时序数
+	java -jar iotdbControlByJDBC.jar "192.168.130.5" "TSL" "ln3" "3"
+	9 查看设备
+	java -jar iotdbControlByJDBC.jar "192.168.130.5" "SDV" "ln3"
+	或
+	java -jar iotdbControlByJDBC.jar "192.168.130.5" "SDV" ""
+	10 统一查询
+	java -jar iotdbControlByJDBC.jar "192.168.130.5" "CMQ" "select * from root.ln3.dev1"
+	11 删除时序信息
+	java -jar iotdbControlByJDBC.jar "192.168.130.5" "DTS" "root.ln1.dev2.status"
+	
+3 本系统目前遗留的问题
+	a 插入记录时execute的用法会报错，不确定是否和jdbc程序有关。
+	b 统一查询的结果只有一个通用模型，因此不能把每次不同的select查询结果全部取出，因此目前
+	只能看到查询是否正确执行，查询结果的正确不能确定。
+	c tsFile通过jdbc进行热加载的操作还没有添加。
+	d jar后面加载参数的时候，如果通过其他函数返回值获取，总会出现问题，不确定是格式还是什么
+	地方的问题，所以参数暂时通过jar后面直接跟args参数的形式，不使用读取配置文件的形式。
+	
+	d 
+	

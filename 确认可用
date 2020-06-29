@@ -1,0 +1,71 @@
+System.out.println("Create storage group  start ... ...");
+		for(int i=11;i<15;i++){
+			if(cit.createGroup("group_", i)){
+				System.out.println("++");
+			}
+			else{
+				System.out.println("--");
+			}
+		}
+		System.out.println("Create storage group  end ... ...");
+		
+/////////////////
+
+//		创建时序信息开始
+		if(cit.createTS("dev", "status", "group_7","INT64","REGULAR","SNAPPY")){
+			System.out.println("Create ts success");
+		}
+		else{
+			System.out.println("Create ts unsuccess");
+		}
+//		创建时序信息结束
+
+
+//////////////////////
+		prepareStatement 插入记录
+		if(cit.insertRecordPrestat("root.group_6", "dev", "1", "status", "5")){
+			System.out.println("+++");
+		}
+		else{
+			System.out.println("---");
+		}
+		
+		execute插入-系统有误，需要检查
+		if(cit.insertRecordExecute("root.group_6", "dev", "2", "status", "3")){
+			System.out.println("**");
+		}
+		else{
+			System.out.println("====");
+		}
+		
+		insertBatch
+		cit.insertRecordBatch("root.group_6", "dev",  "status", "6");
+		
+//////////////////////
+
+		show 查看存储组
+		cit.showGP();
+		
+		查看时序
+		cit.showTS(sgName);
+		
+		查看设备
+		cit.showDEV();
+		
+		统计时序记录数量
+		cit.countTS("");
+		
+		按等级统计节点数
+		countNDbyLevel(String sgName,String level)
+		
+		按等级统计时序记录数
+		countTSbyLevel(String sgName,String level)
+		
+		统一查询
+		commonQuery(String sql)
+		
+		删除时序信息
+		delTS(String tsName)
+		
+/////////////////////////////////////
+		差热加载
