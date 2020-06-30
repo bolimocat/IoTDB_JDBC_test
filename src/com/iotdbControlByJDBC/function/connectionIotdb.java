@@ -51,13 +51,12 @@ public class connectionIotdb {
 			ps = ct.prepareStatement("set storage group to root."+gpName);
 			int status = ps.executeUpdate();
 				if(status==0){
-					System.out.println("存储组 "+gpName+"创建成功。 ");
 					result = true;
 				}
 				else{
-					System.out.println("存储组 "+gpName+"创建失败。 ");
 					result = false;
 				}
+				
 		} catch (Exception eCreateGPjdbc) {
 			eCreateGPjdbc.printStackTrace();
 		}
@@ -71,7 +70,12 @@ public class connectionIotdb {
 				eCloseDb.printStackTrace();
 			}
 		}
-		
+		if(result){
+			System.out.println("存储组 "+gpName+"创建成功。 ");
+		}
+		else{
+			System.out.println("存储组 "+gpName+"创建失败。 ");
+		}
 		return result;
 	}
 	
@@ -91,19 +95,17 @@ public class connectionIotdb {
 			Class.forName(dbdriver);
 			ct = DriverManager.getConnection(dblink, user, password);
 			ps = ct.prepareStatement("create timeseries root."+gpName+"."+devName+"."+tsName+" with datatype="+datatype+",encoding="+ecoding+" , COMPRESSOR="+isCompress+", MAX_POINT_NUMBER="+ptNum+"");
-			if(ps.executeUpdate()==0){
+			int status = ps.executeUpdate();
+			if(status==0){
 				result = true;
-				System.out.println("创建时序信息 root."+gpName+"."+devName+"."+tsName+"成功");
 			}
 			else{
 				result = false;
-				System.out.println("创建时序信息 root."+gpName+"."+devName+"."+tsName+"失败");
 			}
 			} catch (Exception eCreateGPjdbc) {
 			eCreateGPjdbc.printStackTrace();
 		}
 		finally{
-			
 			try {
 				if(rs!=null) rs.close();
 				if(ps!=null) ps.close();
@@ -112,10 +114,52 @@ public class connectionIotdb {
 				eCloseDb.printStackTrace();
 			}
 		}
+		if(result){
+			System.out.println("创建时序信息 root."+gpName+"."+devName+"."+tsName+"成功");
+		}
+		else{
+			System.out.println("创建时序信息 root."+gpName+"."+devName+"."+tsName+"失败");
+		}
 		return result;
 	}
 
-
+	//自由执行DDL操作
+	public boolean tDDL(String sqlStr){
+		boolean result = false;
+		try {
+			Class.forName(dbdriver);
+			ct = DriverManager.getConnection(dblink, user, password);
+			ps = ct.prepareStatement(sqlStr);
+			int status = ps.executeUpdate();
+			if(status==0){
+				result = true;
+			}
+			else{
+				result = false;
+			}
+			} catch (Exception eCreateGPjdbc) {
+			eCreateGPjdbc.printStackTrace();
+		}
+		finally{
+			try {
+				if(rs!=null) rs.close();
+				if(ps!=null) ps.close();
+				if(ct!=null) ct.close();
+			} catch (Exception eCloseDb) {
+				eCloseDb.printStackTrace();
+			}
+		}
+		if(result){
+			System.out.println("执行DDL语句 "+sqlStr+" 成功。");
+		}
+		else{
+			System.out.println("执行DDL语句 "+sqlStr+" 失败。");
+		}
+		return result;
+	}
+	
+	
+	
 	/**
 	 * jdbc插入记录batch
 	 * @param sgName
@@ -165,7 +209,7 @@ public class connectionIotdb {
 	 * @param senValue
 	 * @return
 	 */
-	public boolean insertRecordPrestat(String gpName,String devName,String senName,String senValue){
+	public void insertRecordPrestat(String gpName,String devName,String senName,String senValue){
 		boolean result = false;
 		Date dt= new Date();
 		long timeseries = dt.getTime();
@@ -194,7 +238,7 @@ public class connectionIotdb {
 				eCloseDb.printStackTrace();
 			}
 		}
-		return result;
+//		return result;
 	}
 
 	/**
@@ -493,7 +537,7 @@ public class connectionIotdb {
 	 * @param tsName
 	 * @return
 	 */
-	public boolean delTS(String tsName){
+	public void delTS(String tsName){
 		boolean result = false;
 		try {
 			Class.forName(dbdriver);
@@ -520,6 +564,6 @@ public class connectionIotdb {
 				eCloseDb.printStackTrace();
 			}
 		}
-		return result;
+//		return result;
 	}
 }
