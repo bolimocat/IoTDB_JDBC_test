@@ -81,15 +81,20 @@ public class main {
 				System.out.println(i+" "+rb.getResult());
 			}
 		}
-		if(exeType.equals("CMQ")){
+		if(exeType.equals("DML")){
 			System.out.println("进入 统一查询的 分支");
 			ArrayList queryList = new ArrayList();
-			queryList = cit.commonQuery(args[2]);
+			queryList = cit.tDML(args[2]);
 			for(int i=0;i<queryList.size();i++){
 				resultBean rb = (resultBean)queryList.get(i);
 				System.out.println(i+" "+rb.getResult());
 			}
 			System.out.println("统一查询的 分支 结束");
+		}
+		if(exeType.equals("DDL")){
+			System.out.println("进入 任意执行DDL语句的 分支");
+			cit.tDDL(args[2]);
+			System.out.println("任意执行DDL语句的 分支 结束");
 		}
 		if(exeType.equals("DTS")){
 			System.out.println("进入 删除时序信息的 分支");

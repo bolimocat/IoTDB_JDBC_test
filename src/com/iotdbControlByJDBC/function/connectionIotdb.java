@@ -71,10 +71,10 @@ public class connectionIotdb {
 			}
 		}
 		if(result){
-			System.out.println("存储组 "+gpName+"创建成功。 ");
+			System.out.println("存储组 [ "+gpName+" ] 创建成功。 ");
 		}
 		else{
-			System.out.println("存储组 "+gpName+"创建失败。 ");
+			System.out.println("存储组 [ "+gpName+" ] 创建失败。 ");
 		}
 		return result;
 	}
@@ -115,16 +115,20 @@ public class connectionIotdb {
 			}
 		}
 		if(result){
-			System.out.println("创建时序信息 root."+gpName+"."+devName+"."+tsName+"成功");
+			System.out.println("创建时序信息 [ root."+gpName+"."+devName+"."+tsName+" ] 成功");
 		}
 		else{
-			System.out.println("创建时序信息 root."+gpName+"."+devName+"."+tsName+"失败");
+			System.out.println("创建时序信息 [ root."+gpName+"."+devName+"."+tsName+" ] 失败");
 		}
 		return result;
 	}
 
-	//自由执行DDL操作
-	public boolean tDDL(String sqlStr){
+	/**
+	 * 自由执行DDL操作
+	 * @param sqlStr
+	 * @return
+	 */
+	public void tDDL(String sqlStr){
 		boolean result = false;
 		try {
 			Class.forName(dbdriver);
@@ -150,12 +154,12 @@ public class connectionIotdb {
 			}
 		}
 		if(result){
-			System.out.println("执行DDL语句 "+sqlStr+" 成功。");
+			System.out.println("执行DDL语句 [ "+sqlStr+" ] 成功。");
 		}
 		else{
-			System.out.println("执行DDL语句 "+sqlStr+" 失败。");
+			System.out.println("执行DDL语句 [ "+sqlStr+" ] 失败。");
 		}
-		return result;
+//		return result;
 	}
 	
 	
@@ -209,7 +213,7 @@ public class connectionIotdb {
 	 * @param senValue
 	 * @return
 	 */
-	public void insertRecordPrestat(String gpName,String devName,String senName,String senValue){
+	public boolean insertRecordPrestat(String gpName,String devName,String senName,String senValue){
 		boolean result = false;
 		Date dt= new Date();
 		long timeseries = dt.getTime();
@@ -217,13 +221,14 @@ public class connectionIotdb {
 			Class.forName(dbdriver);
 			ct = DriverManager.getConnection(dblink, user, password);
 			ps = ct.prepareStatement("insert into root."+gpName+"."+devName+"(timestamp,"+senName+") values ("+timeseries+","+senValue+");");
-			if(ps.executeUpdate()==0){
+			int status = ps.executeUpdate();
+			if(status==0){
 				result = true;
-				System.out.println("IR2方式插入记录成功。");
+//				
 			}
 			else{
 				result = false;
-				System.out.println("IR2方式插入记录失败。");
+//				
 			}
 			} catch (Exception insertRecordPrestat) {
 				insertRecordPrestat.printStackTrace();
@@ -238,7 +243,12 @@ public class connectionIotdb {
 				eCloseDb.printStackTrace();
 			}
 		}
-//		return result;
+		if(result){
+			System.out.println("IR2方式插入记录成功。");
+		}else {
+			System.out.println("IR2方式插入记录失败。");
+		}
+		return result;
 	}
 
 	/**
@@ -499,17 +509,17 @@ public class connectionIotdb {
 	}
 
 	/**
-	 * 执行统一查询
+	 * 自由执行查询操作
 	 * @param sql
 	 * @return
 	 */
-	public ArrayList commonQuery(String sql){
+	public ArrayList tDML(String sqlStr){
 		ArrayList result = new ArrayList();
 		try {
 			Class.forName(dbdriver);
 			ct = DriverManager.getConnection(dblink, user, password);
 			stmt = ct.createStatement();
-			rs = stmt.executeQuery(sql);
+			rs = stmt.executeQuery(sqlStr);
 			while(rs.next()){
 				resultBean rb = new resultBean();
 				rb.setResult(rs.getString(1));
@@ -543,13 +553,14 @@ public class connectionIotdb {
 			Class.forName(dbdriver);
 			ct = DriverManager.getConnection(dblink, user, password);
 			ps = ct.prepareStatement("DELETE TIMESERIES "+tsName);
-			if(ps.executeUpdate()==0){
+			int status = ps.executeUpdate();
+			if(status==0){
 				result = true;
-				System.out.println(tsName+" 信息删除成功。");
+//				System.out.println(tsName+" 信息删除成功。");
 			}
 			else{
 				result = false;
-				System.out.println(tsName+" 信息删除失败。");
+//				System.out.println(tsName+" 信息删除失败。");
 			}
 			} catch (Exception insertRecordPrestat) {
 				insertRecordPrestat.printStackTrace();
@@ -563,6 +574,11 @@ public class connectionIotdb {
 			} catch (Exception eCloseDb) {
 				eCloseDb.printStackTrace();
 			}
+		}
+		if(result){
+			System.out.println(tsName+" 信息删除成功。");
+		}else{
+			System.out.println(tsName+" 信息删除失败。");
 		}
 //		return result;
 	}
